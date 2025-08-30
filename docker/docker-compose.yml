@@ -1,0 +1,14 @@
+services:
+  ros_side:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: frenetix-ros-side:latest
+    container_name: frenetix-ros-side
+    ports:
+      - "9090:9090"   # rosbridge websocket if you launch it
+    volumes:
+      - ../ros2_ws/src:/root/ros2_ws/src
+    tty: true
+    stdin_open: true
+    command: bash -lc "sleep infinity"

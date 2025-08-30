@@ -1,0 +1,19 @@
+cd docker
+docker compose build
+
+if not running
+docker compose up -d
+
+1. on a terminal
+docker exec -it frenetix-ros-side bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+
+2. on another terminal
+docker exec -it frenetix-ros-side bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 run frenetix_node simple_node
+
+3. run main.py
