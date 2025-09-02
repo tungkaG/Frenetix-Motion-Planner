@@ -7,6 +7,7 @@ __status__ = "Beta"
 
 from copy import deepcopy
 import numpy as np
+import time
 
 from commonroad.geometry.shape import Rectangle
 from commonroad.planning.planning_problem import PlanningProblem
@@ -60,6 +61,8 @@ class FrenetPlannerInterface(PlannerInterface):
         self.planning_problem = planning_problem
         self.log_path = log_path
         self.mod_path = mod_path
+
+        self.received_board_trajectory = False
 
         # *************************************
         # Message Logger of Run
@@ -153,6 +156,7 @@ class FrenetPlannerInterface(PlannerInterface):
 
         # Set up subscriber and publisher on the same client
         self.sub = self.planner.setup_subscriber(self.client)
+        self.sub_latency = self.setup_subscriber()
         self.pub = roslibpy.Topic(self.client, "/hpc_output_data", "rt_motion_planning_hpc_msgs/HpcOutputData")
 
         # Publish 1st query
@@ -168,6 +172,18 @@ class FrenetPlannerInterface(PlannerInterface):
                 "orientation": self.x_0.orientation,
                 "desired_velocity": self.velocity_planner.calculate_desired_velocity(self.x_0, self.x_cl[0][0])
             })
+        
+    def setup_subscriber(self):
+
+        def on_msg(msg):
+            
+            self.received_board_trajectory = True
+
+            print(msg["sampling_latency_ms"])
+
+        sub = roslibpy.Topic(self.client, "/hpc_input_data", "rt_motion_planning_hpc_msgs/HpcInputData")
+        sub.subscribe(on_msg)
+        return sub
 
     @property
     def all_trajectories(self):
@@ -297,6 +313,9 @@ class FrenetPlannerInterface(PlannerInterface):
                 "orientation": self.x_0.orientation,
                 "desired_velocity": self.desired_velocity
             })
+
+            while (not self.received_board_trajectory):
+                time.sleep(0.2)
 
             self.msg_logger.info(f"current time step: {current_timestep}")
             self.msg_logger.info(f"current velocity: {self.x_0.velocity}")

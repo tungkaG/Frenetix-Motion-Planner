@@ -58,6 +58,8 @@ class ReactivePlannerCpp(Planner):
         self.received_board_trajectory = False
         self.trajectories_board = []
 
+        self.sampling_latencies = []
+
         frenetix._frenetix.setup_logger(msg_logger)
     
     def setup_subscriber(self, client):
@@ -99,6 +101,7 @@ class ReactivePlannerCpp(Planner):
 
                 self.trajectories_board.append(traj)
 
+            self.sampling_latencies.append(msg["sampling_latency_ms"])
             # print(f"Stored {len(self.trajectories_board)} trajectories")
 
             # # Example access
