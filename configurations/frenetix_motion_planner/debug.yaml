@@ -1,7 +1,7 @@
 # Trajectory Debug Information
 save_all_traj: False #(only supported in single-processing simulation)
 save_unweighted_costs: False
-log_risk: False # Doesn't work for ground_truth prediction!
+log_risk: True # Doesn't work for ground_truth prediction!
 draw_traj_set: True #(only supported in single-processing simulation)
 kinematic_debug: True
 

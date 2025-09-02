@@ -27,7 +27,7 @@ python = ">=3.9,<3.12"
 
 # internal, will be resolved when we publish it.
 
-commonroad-drivability-checker = "~2024.1"
+# commonroad-drivability-checker = "~2024.1"
 commonroad-route-planner = "~2024.2.1"
 commonroad-io = "~2024.2"
 commonroad-vehicle-models = "^3.0.2"
@@ -47,7 +47,7 @@ pygeos = "~0.14"
 imageio = "^2.31.2"
 shapely = "^2.0.6"
 pandas = "~2.0.3"
-triangle = ">=20200424"
+# triangle = ">=20200424"
 psutil = ">=5.9.6"
 rich = "^13.7.1"
 

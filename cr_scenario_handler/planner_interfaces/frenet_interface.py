@@ -153,7 +153,7 @@ class FrenetPlannerInterface(PlannerInterface):
 
         # Set up subscriber and publisher on the same client
         self.sub = self.planner.setup_subscriber(self.client)
-        self.pub = roslibpy.Topic(self.client, "/board_input_data", "trajectory_msgs_custom/BoardInputData")
+        self.pub = roslibpy.Topic(self.client, "/hpc_output_data", "rt_motion_planning_hpc_msgs/HpcOutputData")
 
         # Publish 1st query
         self.pub.publish({

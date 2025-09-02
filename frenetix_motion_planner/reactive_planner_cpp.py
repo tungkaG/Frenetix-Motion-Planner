@@ -65,6 +65,8 @@ class ReactivePlannerCpp(Planner):
         self.trajectories_board.clear()
 
         def on_msg(msg):
+            self.trajectories_board.clear()
+            
             self.received_board_trajectory = True
 
             # Iterate over every trajectory sample in the received message
@@ -104,7 +106,7 @@ class ReactivePlannerCpp(Planner):
                 print("First trajectory x:", self.trajectories_board[0].cartesian.x[:5])
                 print("First trajectory cost:", self.trajectories_board[0].cost)
 
-        sub = roslibpy.Topic(client, "/board_output_data", "trajectory_msgs_custom/BoardOutputData")
+        sub = roslibpy.Topic(client, "/hpc_input_data", "rt_motion_planning_hpc_msgs/HpcInputData")
         sub.subscribe(on_msg)
         return sub
 
