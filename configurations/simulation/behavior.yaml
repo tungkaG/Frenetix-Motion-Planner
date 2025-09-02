@@ -3,7 +3,7 @@ use_behavior_planner: False  # WARNING: Currently works only without multiagent!
 
 # general configs
 dt: 0.1  # s, length of a simulation time step
-replanning_frequency: 3  # time steps, should be set by Planner Interface during initialization
+replanning_frequency: 1  # time steps, should be set by Planner Interface during initialization
 
 # path_planner configs
 dist_between_points: 0.125  # m

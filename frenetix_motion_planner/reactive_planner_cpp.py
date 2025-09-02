@@ -99,12 +99,12 @@ class ReactivePlannerCpp(Planner):
 
                 self.trajectories_board.append(traj)
 
-            print(f"Stored {len(self.trajectories_board)} trajectories")
+            # print(f"Stored {len(self.trajectories_board)} trajectories")
 
-            # Example access
-            if self.trajectories_board:
-                print("First trajectory x:", self.trajectories_board[0].cartesian.x[:5])
-                print("First trajectory cost:", self.trajectories_board[0].cost)
+            # # Example access
+            # if self.trajectories_board:
+            #     print("First trajectory x:", self.trajectories_board[0].cartesian.x[:5])
+            #     print("First trajectory cost:", self.trajectories_board[0].cost)
 
         sub = roslibpy.Topic(client, "/hpc_input_data", "rt_motion_planning_hpc_msgs/HpcInputData")
         sub.subscribe(on_msg)
@@ -474,10 +474,10 @@ class ReactivePlannerCpp(Planner):
         # Update Trajectory Pair & Commonroad Object
         # ******************************************
         self.trajectory_pair = self._compute_trajectory_pair(optimal_trajectory) if optimal_trajectory is not None else None
-        if self.trajectory_pair is not None:
-            current_ego_vehicle = self.convert_state_list_to_commonroad_object(self.trajectory_pair[0].state_list,
-                                                                               self.config_sim.simulation.ego_agent_id)
-            self.set_ego_vehicle_state(current_ego_vehicle=current_ego_vehicle)
+        # if self.trajectory_pair is not None:
+        #     current_ego_vehicle = self.convert_state_list_to_commonroad_object(self.trajectory_pair[0].state_list,
+        #                                                                        self.config_sim.simulation.ego_agent_id)
+        #     self.set_ego_vehicle_state(current_ego_vehicle=current_ego_vehicle)
 
         # ************************************
         # Set Risk Costs to Optimal Trajectory
@@ -518,13 +518,13 @@ class ReactivePlannerCpp(Planner):
 
         self.trajectory_board_pair = self._compute_trajectory_pair(optimal_trajectory_board) if optimal_trajectory_board is not None else None
 
-        # if self.trajectory_board_pair is not None:
-        #     current_ego_vehicle = self.convert_state_list_to_commonroad_object(self.trajectory_board_pair[0].state_list,
-        #                                                                        self.config_sim.simulation.ego_agent_id)
-        #     self.set_ego_vehicle_state(current_ego_vehicle=current_ego_vehicle) # TODO GLENN: Comment this similar line above if we want to use traj_board to plot
+        if self.trajectory_board_pair is not None:
+            current_ego_vehicle = self.convert_state_list_to_commonroad_object(self.trajectory_board_pair[0].state_list,
+                                                                               self.config_sim.simulation.ego_agent_id)
+            self.set_ego_vehicle_state(current_ego_vehicle=current_ego_vehicle) # TODO GLENN: Comment this similar line above if we want to use traj_board to plot
 
-        # if self._draw_traj_set or self.save_all_traj:
-        #     self.all_traj = self.trajectories_board # TODO GLENN: Comment this similar line above if we want to use traj_board to plot
+        if self._draw_traj_set or self.save_all_traj:
+            self.all_traj = self.trajectories_board # TODO GLENN: Comment out this line above if we want to display traj from hpc
         # =============================================================
 
         return self.trajectory_pair, self.trajectory_board_pair

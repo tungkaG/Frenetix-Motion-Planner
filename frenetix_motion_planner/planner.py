@@ -142,6 +142,7 @@ class Planner:
         self.all_traj = None
         self.optimal_trajectory = None
         self.trajectory_pair = None
+        self.trajectory_board_pair = None
         self.use_occ_model = False
         if config_plan.debug.activate_logging:
             self.logger = DataLoggingCosts(

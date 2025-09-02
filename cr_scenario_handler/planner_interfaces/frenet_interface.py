@@ -276,14 +276,14 @@ class FrenetPlannerInterface(PlannerInterface):
                 return None, self.replanning_counter
 
             # record the new state for planner-internal logging
-            self.planner.record_state_and_input(optimal_trajectory_pair[0].state_list[1]) # GLENN: this updates x_0 below
-            # self.planner.record_state_and_input(optimal_trajectory_board_pair[0].state_list[1])
+            # self.planner.record_state_and_input(optimal_trajectory_pair[0].state_list[1]) # TODO GLENN: this updates x_0 below
+            self.planner.record_state_and_input(optimal_trajectory_board_pair[0].state_list[1])
 
             # update init state and curvilinear state
-            self.x_0 = deepcopy(self.planner.record_state_list[-1]) # GLENN: UPDATE VELOCITY AND ORIENTATION HERE (x_0.orientation, x_0.velocity)
-            self.x_cl = (optimal_trajectory_pair[2][1], optimal_trajectory_pair[3][1]) # GLENN: UPDATE X_CL HERE
-            # self.x_0 = deepcopy(self.planner.record_state_list[-1]) 
-            # self.x_cl = (optimal_trajectory_board_pair[2][1], optimal_trajectory_board_pair[3][1]) 
+            # self.x_0 = deepcopy(self.planner.record_state_list[-1]) # TODO GLENN: UPDATE VELOCITY AND ORIENTATION HERE (x_0.orientation, x_0.velocity)
+            # self.x_cl = (optimal_trajectory_pair[2][1], optimal_trajectory_pair[3][1]) # TODO GLENN: UPDATE X_CL HERE
+            self.x_0 = deepcopy(self.planner.record_state_list[-1]) 
+            self.x_cl = (optimal_trajectory_board_pair[2][1], optimal_trajectory_board_pair[3][1]) 
 
             self.pub.publish({
                 "s": self.x_cl[0][0],
@@ -309,6 +309,7 @@ class FrenetPlannerInterface(PlannerInterface):
 
         else:
 
+            # # ====================================== TODO GLENN ====================================== # #
             # record the new state for planner-internal logging
             self.planner.record_state_and_input(self.replanning_traj[0].state_list[1+self.replanning_counter])
 
@@ -317,7 +318,21 @@ class FrenetPlannerInterface(PlannerInterface):
             self.x_cl = (self.replanning_traj[2][1+self.replanning_counter], self.replanning_traj[3][1+self.replanning_counter])
 
             current_ego_vehicle = self.planner.convert_state_list_to_commonroad_object(self.trajectory_pair[0].state_list[self.replanning_counter:],
+                                                                                       self.config_sim.simulation.ego_agent_id) 
+            # # ====================================== TODO GLENN ====================================== # #
+
+            # # ====================================== TODO GLENN ====================================== # #
+            # record the new state for planner-internal logging
+            self.planner.record_state_and_input(self.replanning_traj_board[0].state_list[1+self.replanning_counter])
+
+            # update init state and curvilinear state
+            self.x_0 = deepcopy(self.planner.record_state_list[-1])
+            self.x_cl = (self.replanning_traj_board[2][1+self.replanning_counter], self.replanning_traj_board[3][1+self.replanning_counter])
+
+            current_ego_vehicle = self.planner.convert_state_list_to_commonroad_object(self.trajectory_board_pair[0].state_list[self.replanning_counter:],
                                                                                        self.config_sim.simulation.ego_agent_id)
+           # # ====================================== TODO GLENN ====================================== # #
+            
             self.planner.set_ego_vehicle_state(current_ego_vehicle=current_ego_vehicle)
 
             self.planner.plan_postprocessing(optimal_trajectory=self.planner.optimal_trajectory, planning_time=0.0,
