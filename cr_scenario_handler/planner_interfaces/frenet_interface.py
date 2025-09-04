@@ -8,6 +8,8 @@ __status__ = "Beta"
 from copy import deepcopy
 import numpy as np
 import time
+import csv
+import os
 
 from commonroad.geometry.shape import Rectangle
 from commonroad.planning.planning_problem import PlanningProblem
@@ -57,6 +59,7 @@ class FrenetPlannerInterface(PlannerInterface):
         self.replanning_traj = None
         self.replanning_traj_board = None
         self.behavior_module_state = None
+        self.start_planning_time = None
 
         self.planning_problem = planning_problem
         self.log_path = log_path
@@ -173,13 +176,21 @@ class FrenetPlannerInterface(PlannerInterface):
                 "desired_velocity": self.velocity_planner.calculate_desired_velocity(self.x_0, self.x_cl[0][0])
             })
         
+        # CSV Logging setup
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        self.csv_log_path = os.path.join(self.log_path, f"latency_log_vehicle_{timestamp}.csv")
+        
     def setup_subscriber(self):
 
         def on_msg(msg):
             
             self.received_board_trajectory = True
 
-            print(msg["sampling_latency_ms"])
+            planning_latency = time.time() - self.start_planning_time
+
+            with open(self.csv_log_path, mode='a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow([planning_latency*1000, msg['sampling_latency_ms']]) # both in ms
 
         sub = roslibpy.Topic(self.client, "/hpc_input_data", "rt_motion_planning_hpc_msgs/HpcInputData")
         sub.subscribe(on_msg)
@@ -314,8 +325,10 @@ class FrenetPlannerInterface(PlannerInterface):
                 "desired_velocity": self.desired_velocity
             })
 
+            self.start_planning_time = time.time()
+
             while (not self.received_board_trajectory):
-                time.sleep(0.2)
+                time.sleep(0.01)
 
             self.msg_logger.info(f"current time step: {current_timestep}")
             self.msg_logger.info(f"current velocity: {self.x_0.velocity}")
