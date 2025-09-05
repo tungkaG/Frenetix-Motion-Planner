@@ -1,0 +1,28 @@
+Results for 64 samples
+  Min: 953.059
+  Max: 1543.943
+  Avg: 1070.606
+  Std Deviation: 88.734
+  Jitter: 590.884
+
+Results for 100 samples
+  Min: 1415.796
+  Max: 3423.998
+  Avg: 1967.243
+  Std Deviation: 415.858
+  Jitter: 2008.203
+
+Results for 32 samples
+  Min: 769.714
+  Max: 959.072
+  Avg: 791.903
+  Std Deviation: 25.390
+  Jitter: 189.358
+
+Results for 12 samples
+  Min: 304.682
+  Max: 328.151
+  Avg: 314.502
+  Std Deviation: 6.073
+  Jitter: 23.469
+
